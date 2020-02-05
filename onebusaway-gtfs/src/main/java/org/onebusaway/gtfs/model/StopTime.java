@@ -88,18 +88,10 @@ public final class StopTime extends IdentityBean<Integer> implements
    * 0 - unknown
    * 1 - allowed
    * 2 - forbidden
+   * 3 - no_boarding_unboarding
    */
   @CsvField(optional = true, defaultValue = "0")
-  private int bikePickupType;
-
-  /**
-   * 0 - unknown
-   * 1 - allowed
-   * 2 - forbidden
-   * 3 - mandatory
-   */
-  @CsvField(optional = true, defaultValue = "0")
-  private int bikeDropOffType;
+  private int bikesAllowed;
 
   @CsvField(optional = true, defaultValue = "0")
   private int dropOffType;
@@ -202,8 +194,7 @@ public final class StopTime extends IdentityBean<Integer> implements
     this.safeDurationOffset= st.safeDurationOffset;
     this.meanDurationOffset= st.meanDurationOffset;
     this.meanDurationFactor= st.meanDurationFactor;
-    this.bikeDropOffType = st.bikeDropOffType;
-    this.bikePickupType = st.bikePickupType;
+    this.bikesAllowed = st.bikesAllowed;
   }
 
   public Integer getId() {
@@ -465,20 +456,6 @@ public final class StopTime extends IdentityBean<Integer> implements
     this.pickupType = pickupType;
   }
 
-  public int getBikePickupType() {
-    if (proxy != null) {
-      return proxy.getBikePickupType();
-    }
-    return bikePickupType;
-  }
-
-  public void setBikePickupType(int bikePickupType) {
-    if (proxy != null) {
-      proxy.setBikePickupType(bikePickupType);
-    }
-    this.bikePickupType = bikePickupType;
-  }
-
   public int getDropOffType() {
     if (proxy != null) {
       return proxy.getDropOffType();
@@ -493,19 +470,19 @@ public final class StopTime extends IdentityBean<Integer> implements
     }
     this.dropOffType = dropOffType;
   }
-  public int getBikeDropOffType() {
+  public int getBikesAllowed() {
     if (proxy != null) {
-      return proxy.getBikeDropOffType();
+      return proxy.getBikesAllowed();
     }
-    return bikeDropOffType;
+    return bikesAllowed;
   }
 
-  public void setBikeDropOffType(int bikeDropOffType) {
+  public void setBikesAllowed(int bikesAllowed) {
     if (proxy != null) {
-      proxy.setBikeDropOffType(bikeDropOffType);
+      proxy.setBikesAllowed(bikesAllowed);
       return;
     }
-    this.bikeDropOffType = bikeDropOffType;
+    this.bikesAllowed = bikesAllowed;
   }
 
   public int getContinuousPickup() {

@@ -39,15 +39,8 @@ public class VVSBikesAllowedStrategy implements GtfsTransformStrategy {
     // Introducing a new value would not be backward compatible, so we'll set UNKNOWN in this case
     // public static final int BIKES_STOP_TIME_DEPENDANT = 3;
 
-
-    public static final int NO_BIKES_PICKUP_INFORMATION = 0;
-    public static final int BIKES_PICKUP_ALLOWED = 1;
-    public static final int NO_BIKES_PICKUP = 2;
-
-    public static final int NO_BIKES_DROPOFF_INFORMATION = 0;
-    public static final int BIKES_DROPOFF_POSSIBLE = 1;
-    public static final int NO_BIKES_DROPOFF = 2;
-    public static final int BIKES_DROPOFF_MANDATORY = 3;
+    // For stopTimes, a new value is introduced: already boarded bike may stay, but no (un)boarding is allowed
+    public static final int BIKES_ALLOWED_BUT_NO_BOARDING_UNBOARDING = 3;
 
     private final TimeRange MIDNIGHT_TO_1830 = TimeRange.create(0, 0, 18, 30);
     private final TimeRange TIME_0600_TO_0830 = TimeRange.create(6, 0, 8, 30);
@@ -193,33 +186,30 @@ public class VVSBikesAllowedStrategy implements GtfsTransformStrategy {
                 if (stopTime.isDepartureTimeSet()) {
                     int departureTime = stopTime.getDepartureTime();
                     if (TimeRange.anyContains(disallowedTimeRanges, departureTime)) {
-                        stopTime.setBikePickupType(NO_BIKES_PICKUP);
+                        stopTime.setBikesAllowed(NO_BIKES_ALLOWED);
                     } else {
-                        stopTime.setBikePickupType(BIKES_PICKUP_ALLOWED);
+                        stopTime.setBikesAllowed(BIKES_ALLOWED);
                     }
-                } else
-                    stopTime.setBikePickupType(NO_BIKES_PICKUP_INFORMATION);
-                if (stopTime.isArrivalTimeSet()) {
+                } else if (stopTime.isArrivalTimeSet()) {
                     int arrivalTime = stopTime.getArrivalTime();
                     if (TimeRange.anyContains(disallowedTimeRanges, arrivalTime)) {
-                        stopTime.setBikeDropOffType(BIKES_DROPOFF_MANDATORY);
+                        stopTime.setBikesAllowed(NO_BIKES_ALLOWED);
                     } else {
-                        stopTime.setBikeDropOffType(BIKES_DROPOFF_POSSIBLE);
+                        stopTime.setBikesAllowed(BIKES_ALLOWED);
                     }
                 } else
-                    stopTime.setBikeDropOffType(NO_BIKES_DROPOFF_INFORMATION);
+                    stopTime.setBikesAllowed(UNKNOWN);
             }
         }
 
         public void allowFirstAndLastStopTime(Trip trip) {
             trip.setBikesAllowed(UNKNOWN);
             List<StopTime> stopTimesForTrip = dao.getStopTimesForTrip(trip);
-            stopTimesForTrip.get(0).setPickupType(BIKES_PICKUP_ALLOWED);
-            stopTimesForTrip.get(stopTimesForTrip.size()-1).setBikeDropOffType(BIKES_DROPOFF_MANDATORY);
+            stopTimesForTrip.get(0).setBikesAllowed(BIKES_ALLOWED);
+            stopTimesForTrip.get(stopTimesForTrip.size()-1).setBikesAllowed(BIKES_ALLOWED);
             for (int i = 1; i < stopTimesForTrip.size()-1; i++) {
                 StopTime stopTime = stopTimesForTrip.get(i);
-                stopTime.setBikeDropOffType(NO_BIKES_DROPOFF);
-                stopTime.setBikePickupType(NO_BIKES_PICKUP);
+                stopTime.setBikesAllowed(BIKES_ALLOWED_BUT_NO_BOARDING_UNBOARDING);
             }
         }
     }
