@@ -84,16 +84,33 @@ public final class StopTime extends IdentityBean<Integer> implements
   @CsvField(optional = true, defaultValue = "0")
   private int pickupType;
 
+  /**
+   * 0 - unknown
+   * 1 - allowed
+   * 2 - forbidden
+   */
+  @CsvField(optional = true, defaultValue = "0")
+  private int bikePickupType;
+
+  /**
+   * 0 - unknown
+   * 1 - allowed
+   * 2 - forbidden
+   * 3 - mandatory
+   */
+  @CsvField(optional = true, defaultValue = "0")
+  private int bikeDropOffType;
+
   @CsvField(optional = true, defaultValue = "0")
   private int dropOffType;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private double shapeDistTraveled = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private int continuousPickup = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private int continuousDropOff = MISSING_VALUE;
 
   @CsvField(optional = true, name = "start_service_area_id", mapping = EntityFieldMappingFactory.class, order = -2)
@@ -102,10 +119,10 @@ public final class StopTime extends IdentityBean<Integer> implements
   @CsvField(optional = true, name = "end_service_area_id", mapping = EntityFieldMappingFactory.class, order = -2)
   private Area endServiceArea;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999.0")
   private double startServiceAreaRadius = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999.0")
   private double endServiceAreaRadius = MISSING_VALUE;
 
   @CsvField(ignore = true)
@@ -185,6 +202,8 @@ public final class StopTime extends IdentityBean<Integer> implements
     this.safeDurationOffset= st.safeDurationOffset;
     this.meanDurationOffset= st.meanDurationOffset;
     this.meanDurationFactor= st.meanDurationFactor;
+    this.bikeDropOffType = st.bikeDropOffType;
+    this.bikePickupType = st.bikePickupType;
   }
 
   public Integer getId() {
@@ -446,6 +465,20 @@ public final class StopTime extends IdentityBean<Integer> implements
     this.pickupType = pickupType;
   }
 
+  public int getBikePickupType() {
+    if (proxy != null) {
+      return proxy.getBikePickupType();
+    }
+    return bikePickupType;
+  }
+
+  public void setBikePickupType(int bikePickupType) {
+    if (proxy != null) {
+      proxy.setBikePickupType(bikePickupType);
+    }
+    this.bikePickupType = bikePickupType;
+  }
+
   public int getDropOffType() {
     if (proxy != null) {
       return proxy.getDropOffType();
@@ -459,6 +492,20 @@ public final class StopTime extends IdentityBean<Integer> implements
       return;
     }
     this.dropOffType = dropOffType;
+  }
+  public int getBikeDropOffType() {
+    if (proxy != null) {
+      return proxy.getBikeDropOffType();
+    }
+    return bikeDropOffType;
+  }
+
+  public void setBikeDropOffType(int bikeDropOffType) {
+    if (proxy != null) {
+      proxy.setBikeDropOffType(bikeDropOffType);
+      return;
+    }
+    this.bikeDropOffType = bikeDropOffType;
   }
 
   public int getContinuousPickup() {

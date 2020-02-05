@@ -75,9 +75,17 @@ public interface StopTimeProxy {
 
   public void setPickupType(int pickupType);
 
+  public int getBikePickupType();
+
+  public void setBikePickupType(int bikePickupType);
+
   public int getDropOffType();
 
   public void setDropOffType(int dropOffType);
+
+  public int getBikeDropOffType();
+
+  public void setBikeDropOffType(int bikeDropOffType);
 
   public boolean isShapeDistTraveledSet();
 
