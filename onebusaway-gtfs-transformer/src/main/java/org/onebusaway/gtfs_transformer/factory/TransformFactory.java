@@ -301,6 +301,9 @@ public class TransformFactory {
         else if (opType.equals("verify_route_ids")) {
           handleTransformOperation(line, json, new VerifyRouteIds());
         }
+        else if (opType.equals("vvs_bikes_allowed")) {
+          handleTransformOperation(line, json, new VVSBikesAllowedStrategy());
+        }
         else if (opType.equals("KCMSuite")){
           String baseUrl = "https://raw.github.com/wiki/camsys/onebusaway-application-modules";
 

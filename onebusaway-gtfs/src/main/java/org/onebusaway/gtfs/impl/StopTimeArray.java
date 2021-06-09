@@ -51,6 +51,8 @@ public class StopTimeArray extends AbstractList<StopTime> {
 
   private int[] dropOffTypes = new int[0];
 
+  private int[] bikesAllowed = new int[0];
+
   private double[] shapeDistTraveled = new double[0];
 
   private BookingRule[] pickupBookingRules = new BookingRule[0];
@@ -95,7 +97,8 @@ public class StopTimeArray extends AbstractList<StopTime> {
     safeFactors[index] = stopTime.getSafeDurationFactor();
     meanOffsets[index] = stopTime.getMeanDurationOffset();
     meanFactors[index] = stopTime.getMeanDurationFactor();
-    
+    bikesAllowed[index] = stopTime.getBikesAllowed();
+
     return true;
   }
 
@@ -154,6 +157,7 @@ public class StopTimeArray extends AbstractList<StopTime> {
     this.safeFactors = Arrays.copyOf(this.safeFactors, newLength);
     this.meanOffsets = Arrays.copyOf(this.meanOffsets, newLength);
     this.meanFactors = Arrays.copyOf(this.meanFactors, newLength);
+    this.bikesAllowed = Arrays.copyOf(this.bikesAllowed, newLength);
   }
 
   private class StopTimeIterator implements Iterator<StopTime> {
@@ -328,6 +332,16 @@ public class StopTimeArray extends AbstractList<StopTime> {
     @Override
     public void setDropOffType(int dropOffType) {
       dropOffTypes[index] = dropOffType;
+    }
+
+    @Override
+    public int getBikesAllowed() {
+      return bikesAllowed[index];
+    }
+
+    @Override
+    public void setBikesAllowed(int bikesAllowedForStopTime) {
+      bikesAllowed[index] = bikesAllowedForStopTime;
     }
 
     @Override

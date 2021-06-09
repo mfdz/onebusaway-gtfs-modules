@@ -84,16 +84,25 @@ public final class StopTime extends IdentityBean<Integer> implements
   @CsvField(optional = true, defaultValue = "0")
   private int pickupType;
 
+  /**
+   * 0 - unknown
+   * 1 - allowed
+   * 2 - forbidden
+   * 3 - no_boarding_unboarding
+   */
+  @CsvField(optional = true, defaultValue = "0")
+  private int bikesAllowed;
+
   @CsvField(optional = true, defaultValue = "0")
   private int dropOffType;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private double shapeDistTraveled = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private int continuousPickup = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999")
   private int continuousDropOff = MISSING_VALUE;
 
   @CsvField(optional = true, name = "start_service_area_id", mapping = EntityFieldMappingFactory.class, order = -2)
@@ -102,10 +111,10 @@ public final class StopTime extends IdentityBean<Integer> implements
   @CsvField(optional = true, name = "end_service_area_id", mapping = EntityFieldMappingFactory.class, order = -2)
   private Area endServiceArea;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999.0")
   private double startServiceAreaRadius = MISSING_VALUE;
 
-  @CsvField(optional = true)
+  @CsvField(optional = true, defaultValue = "-999.0")
   private double endServiceAreaRadius = MISSING_VALUE;
 
   @CsvField(ignore = true)
@@ -185,6 +194,7 @@ public final class StopTime extends IdentityBean<Integer> implements
     this.safeDurationOffset= st.safeDurationOffset;
     this.meanDurationOffset= st.meanDurationOffset;
     this.meanDurationFactor= st.meanDurationFactor;
+    this.bikesAllowed = st.bikesAllowed;
   }
 
   public Integer getId() {
@@ -459,6 +469,20 @@ public final class StopTime extends IdentityBean<Integer> implements
       return;
     }
     this.dropOffType = dropOffType;
+  }
+  public int getBikesAllowed() {
+    if (proxy != null) {
+      return proxy.getBikesAllowed();
+    }
+    return bikesAllowed;
+  }
+
+  public void setBikesAllowed(int bikesAllowed) {
+    if (proxy != null) {
+      proxy.setBikesAllowed(bikesAllowed);
+      return;
+    }
+    this.bikesAllowed = bikesAllowed;
   }
 
   public int getContinuousPickup() {
