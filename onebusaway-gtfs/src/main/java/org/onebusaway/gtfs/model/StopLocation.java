@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 Brian Ferris <bdferris@onebusaway.org>
+ * Copyright (C) 2020 Kyyti Group Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onebusaway.gtfs_transformer.services;
+package org.onebusaway.gtfs.model;
 
-import org.onebusaway.csv_entities.schema.DefaultEntitySchemaFactory;
+/**
+ * A StopLocation describes a place where a vehicle can be boarded or alighted, which is not
+ * necessarily a marked stop, but can be of other shapes, such as a service area for flexible
+ * transit. StopLocations are referred to in stop times, in stop column.
+ */
+public interface StopLocation {
+    AgencyAndId getId();
 
-public interface SchemaUpdateStrategy {
-  public void updateSchema(DefaultEntitySchemaFactory factory);
+    void setId(AgencyAndId id);
+
+    String getName();
+
+    void setName(String name);
 }

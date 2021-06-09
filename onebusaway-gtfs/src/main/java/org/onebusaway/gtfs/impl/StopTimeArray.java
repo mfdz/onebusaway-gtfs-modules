@@ -21,7 +21,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.onebusaway.gtfs.model.Stop;
+import org.onebusaway.gtfs.model.BookingRule;
+import org.onebusaway.gtfs.model.StopLocation;
 import org.onebusaway.gtfs.model.StopTime;
 import org.onebusaway.gtfs.model.StopTimeProxy;
 import org.onebusaway.gtfs.model.Trip;
@@ -32,7 +33,7 @@ public class StopTimeArray extends AbstractList<StopTime> {
 
   private Trip[] trips = new Trip[0];
 
-  private Stop[] stops = new Stop[0];
+  private StopLocation[] stops = new StopLocation[0];
 
   private int[] arrivalTimes = new int[0];
 
@@ -52,6 +53,18 @@ public class StopTimeArray extends AbstractList<StopTime> {
 
   private double[] shapeDistTraveled = new double[0];
 
+  private BookingRule[] pickupBookingRules = new BookingRule[0];
+
+  private BookingRule[] dropOffBookingRules = new BookingRule[0];
+
+  private int[] meanOffsets = new int[0];
+
+  private int[] safeOffsets = new int[0];
+  
+  private int[] meanFactors = new int[0];
+
+  private int[] safeFactors = new int[0];
+  
   public void trimToSize() {
     setLength(size);
   }
@@ -76,6 +89,13 @@ public class StopTimeArray extends AbstractList<StopTime> {
     pickupTypes[index] = stopTime.getPickupType();
     dropOffTypes[index] = stopTime.getDropOffType();
     shapeDistTraveled[index] = stopTime.getShapeDistTraveled();
+    pickupBookingRules[index] = stopTime.getPickupBookingRule();
+    dropOffBookingRules[index] = stopTime.getDropOffBookingRule();    
+    safeOffsets[index] = stopTime.getSafeDurationOffset();
+    safeFactors[index] = stopTime.getSafeDurationFactor();
+    meanOffsets[index] = stopTime.getMeanDurationOffset();
+    meanFactors[index] = stopTime.getMeanDurationFactor();
+    
     return true;
   }
 
@@ -128,6 +148,12 @@ public class StopTimeArray extends AbstractList<StopTime> {
     this.pickupTypes = Arrays.copyOf(this.pickupTypes, newLength);
     this.dropOffTypes = Arrays.copyOf(this.dropOffTypes, newLength);
     this.shapeDistTraveled = Arrays.copyOf(this.shapeDistTraveled, newLength);
+    this.pickupBookingRules = Arrays.copyOf(this.pickupBookingRules, newLength);
+    this.dropOffBookingRules = Arrays.copyOf(this.dropOffBookingRules, newLength);
+    this.safeOffsets = Arrays.copyOf(this.safeOffsets, newLength);
+    this.safeFactors = Arrays.copyOf(this.safeFactors, newLength);
+    this.meanOffsets = Arrays.copyOf(this.meanOffsets, newLength);
+    this.meanFactors = Arrays.copyOf(this.meanFactors, newLength);
   }
 
   private class StopTimeIterator implements Iterator<StopTime> {
@@ -195,12 +221,12 @@ public class StopTimeArray extends AbstractList<StopTime> {
     }
 
     @Override
-    public Stop getStop() {
+    public StopLocation getStop() {
       return stops[index];
     }
 
     @Override
-    public void setStop(Stop stop) {
+    public void setStop(StopLocation stop) {
       stops[index] = stop;
     }
 
@@ -323,5 +349,66 @@ public class StopTimeArray extends AbstractList<StopTime> {
     public void clearShapeDistTraveled() {
       shapeDistTraveled[index] = StopTime.MISSING_VALUE;
     }
+
+    @Override
+    public BookingRule getPickupBookingRule() {
+      return pickupBookingRules[index];
+    }
+
+    @Override
+    public void setPickupBookingRule(BookingRule pickupBookingRule) {
+      pickupBookingRules[index] = pickupBookingRule;
+    }
+
+    @Override
+    public BookingRule getDropOffBookingRule() {
+      return dropOffBookingRules[index];
+    }
+
+    @Override
+    public void setDropOffBookingRule(BookingRule dropOffBookingRule) {
+      dropOffBookingRules[index] = dropOffBookingRule;
+    }
+
+	@Override
+	public int getMeanDurationFactor() {
+		return meanOffsets[index];
+	}
+
+	@Override
+	public void setMeanDurationFactor(int meanDurationFactor) {
+		meanFactors[index] = meanDurationFactor;		
+	}
+
+	@Override
+	public int getMeanDurationOffset() {
+		return meanOffsets[index];
+	}
+
+	@Override
+	public void setMeanDurationOffset(int meanDurationOffset) {
+		meanOffsets[index] = meanDurationOffset;
+	}
+
+	@Override
+	public int getSafeDurationFactor() {
+		return safeFactors[index];
+	}
+
+	@Override
+	public void setSafeDurationFactor(int safeDurationFactor) {
+		safeFactors[index] = safeDurationFactor;
+	}
+
+	@Override
+	public int getSafeDurationOffset() {
+		return safeOffsets[index];
+	}
+
+	@Override
+	public void setSafeDurationOffset(int safeDurationOffset) {
+		safeOffsets[index] = safeDurationOffset;
+	}
+
   }
 }

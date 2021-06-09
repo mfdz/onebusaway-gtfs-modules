@@ -47,8 +47,8 @@ import org.onebusaway.gtfs.model.Agency;
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.Route;
 import org.onebusaway.gtfs.model.ServiceCalendar;
-import org.onebusaway.gtfs.model.Stop;
 import org.onebusaway.gtfs.model.StopTime;
+import org.onebusaway.gtfs.model.StopLocation;
 import org.onebusaway.gtfs.model.Trip;
 import org.onebusaway.gtfs.model.calendar.CalendarServiceData;
 import org.onebusaway.gtfs.model.calendar.ServiceDate;
@@ -167,7 +167,7 @@ public class WSFBlockResolutionStrategy implements GtfsTransformStrategy {
     }
   }
 
-  private String id(Stop st) {
+  private String id(StopLocation st) {
     return st.getId().getId();
   }
 
@@ -205,7 +205,7 @@ public class WSFBlockResolutionStrategy implements GtfsTransformStrategy {
     @Override
     public Boolean call() {
       List<StopTime> stops = _dao.getStopTimesForTrip(trips.get(0));
-      Stop orig = stops.get(0).getStop(), dest = stops.get(1).getStop();
+      StopLocation orig = stops.get(0).getStop(), dest = stops.get(1).getStop();
 
       _log.info("Submitting WSF block task for {} ({}, {})", cal, orig, dest);
       SchedResponse resp = _scheduleService.getSchedule(date(cal), id(orig),
@@ -362,7 +362,7 @@ class WSFScheduleService {
       String arriveTerminal) {
     long start = System.currentTimeMillis();
     StringBuffer url = new StringBuffer(
-        "http://www.wsdot.wa.gov/ferries/api/schedule/rest/schedule");
+        "https://www.wsdot.wa.gov/ferries/api/schedule/rest/schedule");
     url.append("/" + formatDate(serviceDate));
     url.append("/" + departTerminal);
     url.append("/" + arriveTerminal);
@@ -384,7 +384,7 @@ class WSFScheduleService {
         _log.info("wsf call complete in " + (finish-start)/1000 + "s for call=" + url);
       }
     } catch (Exception e) {
-      _log.error("Exception processing WSF API: " + e);
+      _log.error("Exception processing WSF API for api call:'" + url.toString() + "', " + e);
       return null;
     }
 
