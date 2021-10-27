@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.onebusaway.gtfs.model.Area;
 import org.onebusaway.gtfs.model.BookingRule;
 import org.onebusaway.gtfs.model.StopLocation;
 import org.onebusaway.gtfs.model.StopTime;
@@ -34,6 +35,10 @@ public class StopTimeArray extends AbstractList<StopTime> {
   private Trip[] trips = new Trip[0];
 
   private StopLocation[] stops = new StopLocation[0];
+
+  private Area[] startServiceAreas = new Area[0];
+
+  private Area[] endServiceAreas = new Area[0];
 
   private int[] arrivalTimes = new int[0];
 
@@ -59,13 +64,13 @@ public class StopTimeArray extends AbstractList<StopTime> {
 
   private BookingRule[] dropOffBookingRules = new BookingRule[0];
 
-  private int[] meanOffsets = new int[0];
+  private double[] meanOffsets = new double[0];
 
-  private int[] safeOffsets = new int[0];
+  private double[] safeOffsets = new double[0];
   
-  private int[] meanFactors = new int[0];
+  private double[] meanFactors = new double[0];
 
-  private int[] safeFactors = new int[0];
+  private double[] safeFactors = new double[0];
   
   public void trimToSize() {
     setLength(size);
@@ -81,6 +86,8 @@ public class StopTimeArray extends AbstractList<StopTime> {
     size++;
     ensureCapacity(size);
     trips[index] = stopTime.getTrip();
+    startServiceAreas[index] = stopTime.getStartServiceArea();
+    endServiceAreas[index] = stopTime.getEndServiceArea();
     stops[index] = stopTime.getStop();
     arrivalTimes[index] = stopTime.getArrivalTime();
     departureTimes[index] = stopTime.getDepartureTime();
@@ -141,6 +148,8 @@ public class StopTimeArray extends AbstractList<StopTime> {
 
   private void setLength(int newLength) {
     this.trips = Arrays.copyOf(this.trips, newLength);
+    this.startServiceAreas = Arrays.copyOf(this.startServiceAreas, newLength);
+    this.endServiceAreas = Arrays.copyOf(this.endServiceAreas, newLength);
     this.stops = Arrays.copyOf(this.stops, newLength);
     this.arrivalTimes = Arrays.copyOf(this.arrivalTimes, newLength);
     this.departureTimes = Arrays.copyOf(this.departureTimes, newLength);
@@ -212,6 +221,22 @@ public class StopTimeArray extends AbstractList<StopTime> {
     @Override
     public void setTrip(Trip trip) {
       trips[index] = trip;
+    }
+
+    @Override
+    public Area getStartServiceArea() { return startServiceAreas[index]; }
+
+    @Override
+    public void setStartServiceArea(Area area) {
+      startServiceAreas[index] = area;
+    }
+
+    @Override
+    public Area getEndServiceArea() { return endServiceAreas[index]; }
+
+    @Override
+    public void setEndServiceArea(Area area) {
+      endServiceAreas[index] = area;
     }
 
     @Override
@@ -385,42 +410,42 @@ public class StopTimeArray extends AbstractList<StopTime> {
     }
 
 	@Override
-	public int getMeanDurationFactor() {
+	public double getMeanDurationFactor() {
 		return meanOffsets[index];
 	}
 
 	@Override
-	public void setMeanDurationFactor(int meanDurationFactor) {
+	public void setMeanDurationFactor(double meanDurationFactor) {
 		meanFactors[index] = meanDurationFactor;		
 	}
 
 	@Override
-	public int getMeanDurationOffset() {
+	public double getMeanDurationOffset() {
 		return meanOffsets[index];
 	}
 
 	@Override
-	public void setMeanDurationOffset(int meanDurationOffset) {
+	public void setMeanDurationOffset(double meanDurationOffset) {
 		meanOffsets[index] = meanDurationOffset;
 	}
 
 	@Override
-	public int getSafeDurationFactor() {
+	public double getSafeDurationFactor() {
 		return safeFactors[index];
 	}
 
 	@Override
-	public void setSafeDurationFactor(int safeDurationFactor) {
+	public void setSafeDurationFactor(double safeDurationFactor) {
 		safeFactors[index] = safeDurationFactor;
 	}
 
 	@Override
-	public int getSafeDurationOffset() {
+	public double getSafeDurationOffset() {
 		return safeOffsets[index];
 	}
 
 	@Override
-	public void setSafeDurationOffset(int safeDurationOffset) {
+	public void setSafeDurationOffset(double safeDurationOffset) {
 		safeOffsets[index] = safeDurationOffset;
 	}
 

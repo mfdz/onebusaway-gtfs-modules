@@ -33,9 +33,11 @@ import org.onebusaway.gtfs.impl.GtfsRelationalDaoImpl;
 import org.onebusaway.gtfs.serialization.GtfsReader;
 import org.onebusaway.gtfs.serialization.GtfsWriter;
 import org.onebusaway.gtfs_merge.strategies.AgencyMergeStrategy;
+import org.onebusaway.gtfs_merge.strategies.AreaMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.EntityMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.FareAttributeMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.FareRuleMergeStrategy;
+import org.onebusaway.gtfs_merge.strategies.FeedInfoMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.FrequencyMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.RouteMergeStrategy;
 import org.onebusaway.gtfs_merge.strategies.ServiceCalendarMergeStrategy;
@@ -57,6 +59,8 @@ public class GtfsMerger {
 
   private EntityMergeStrategy _agencyStrategy = new AgencyMergeStrategy();
 
+  private EntityMergeStrategy _areaStrategy = new AreaMergeStrategy();
+
   private EntityMergeStrategy _stopStrategy = new StopMergeStrategy();
 
   private EntityMergeStrategy _serviceCalendarStrategy = new ServiceCalendarMergeStrategy();
@@ -74,6 +78,8 @@ public class GtfsMerger {
   private EntityMergeStrategy _fareAttributeStrategy = new FareAttributeMergeStrategy();
 
   private EntityMergeStrategy _fareRuleStrategy = new FareRuleMergeStrategy();
+
+  private EntityMergeStrategy _feedInfoStrategy = new FeedInfoMergeStrategy();
 
   public void setAgencyStrategy(EntityMergeStrategy agencyStrategy) {
     _agencyStrategy = agencyStrategy;
@@ -115,6 +121,12 @@ public class GtfsMerger {
   public void setFareRuleStrategy(EntityMergeStrategy fareRuleStrategy) {
     _fareRuleStrategy = fareRuleStrategy;
   }
+
+  public void setAreaStrategy(AreaMergeStrategy areaStrategy) {
+    _areaStrategy = areaStrategy;
+  }
+
+  public void setFeedInfoStrategy(EntityMergeStrategy feedInfoStrategy) { _feedInfoStrategy = feedInfoStrategy; }
 
   public EntityMergeStrategy getEntityMergeStrategyForEntityType(
       Class<?> entityType) {
@@ -213,6 +225,7 @@ public class GtfsMerger {
 
   private void buildStrategies(List<EntityMergeStrategy> strategies) {
     strategies.add(_agencyStrategy);
+    strategies.add(_areaStrategy);
     strategies.add(_stopStrategy);
     strategies.add(_serviceCalendarStrategy);
     strategies.add(_routeStrategy);
@@ -222,5 +235,7 @@ public class GtfsMerger {
     strategies.add(_transferStrategy);
     strategies.add(_fareAttributeStrategy);
     strategies.add(_fareRuleStrategy);
+    strategies.add(_feedInfoStrategy);
   }
+
 }

@@ -20,12 +20,14 @@ import org.onebusaway.csv_entities.schema.EntitySchema;
 import org.onebusaway.csv_entities.schema.FieldMapping;
 import org.onebusaway.csv_entities.schema.SingleFieldMapping;
 import org.onebusaway.gtfs.model.Agency;
+import org.onebusaway.gtfs.model.Area;
 import org.onebusaway.gtfs.model.FeedInfo;
 import org.onebusaway.gtfs.model.Route;
 import org.onebusaway.gtfs.model.Stop;
 import org.onebusaway.gtfs.model.StopTime;
 import org.onebusaway.gtfs.model.Translation;
 import org.onebusaway.gtfs.model.Trip;
+import org.onebusaway.gtfs.model.Vehicle;
 import org.onebusaway.gtfs.model.translation.PropertyTranslation;
 import org.onebusaway.gtfs.model.translation.TranslationServiceData;
 import org.onebusaway.gtfs.serialization.GtfsEntitySchemaFactory;
@@ -50,6 +52,10 @@ public class TranslationServiceDataFactoryImpl implements TranslationServiceData
     private static final String STOP_TIME_TABLE_NAME = "stop_times";
 
     private static final String FEED_INFO_TABLE_NAME = "feed_info";
+
+    private static final String AREA_TABLE_NAME = "area";
+
+    private static final String VEHICLE_TABLE_NAME = "vehicle";
 
     private GtfsRelationalDao _dao;
 
@@ -104,6 +110,8 @@ public class TranslationServiceDataFactoryImpl implements TranslationServiceData
         switch(name) {
             case AGENCY_TABLE_NAME:
                 return Agency.class;
+            case AREA_TABLE_NAME:
+                return Area.class;
             case STOP_TABLE_NAME:
                 return Stop.class;
             case ROUTE_TABLE_NAME:
@@ -114,6 +122,8 @@ public class TranslationServiceDataFactoryImpl implements TranslationServiceData
                 return StopTime.class;
             case FEED_INFO_TABLE_NAME:
                 return FeedInfo.class;
+            case VEHICLE_TABLE_NAME:
+                return Vehicle.class;
         }
         return null;
     }
