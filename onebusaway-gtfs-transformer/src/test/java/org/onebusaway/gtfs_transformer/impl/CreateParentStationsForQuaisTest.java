@@ -38,9 +38,11 @@ public class CreateParentStationsForQuaisTest {
         _dao = new GtfsRelationalDaoImpl();
 
         _gtfs = MockGtfs.create();
-        _gtfs.putAgencies(1);
-        _gtfs.putLines("stops.txt",
-                "stop_id,stop_name,stop_lat,stop_lon",
+        _gtfs.putDefaultTrips();
+        _gtfs.putDefaultStopTimes();
+        _gtfs.putLines("stops.txt", "stop_id,stop_name,stop_lat,stop_lon",
+                "100,The Stop,47.654403,-122.305211",
+                "200,The Other Stop,47.656303,-122.315436",
                 "de:08111:6115:1:1,Hauptbahnhof (oben),48.784748077,9.1832141876",
                 "de:08111:6115:1:2,Hauptbahnhof (oben),48.784748077,9.1832141876",
                 "de:08111:6115:2:3,Hauptbahnhof (oben),48.784748077,9.1832141876",
@@ -50,7 +52,6 @@ public class CreateParentStationsForQuaisTest {
                 "de:08111:6116:3:4,Stadtbibliothek,48.790660858,9.1805820465",
                 "de:08111:6118:1:101,Hauptbahnhof (tief),48.783420563,9.1801605225",
                 "de:08111:6118:1:102,Hauptbahnhof (tief),48.783367157,9.1803379059");
-        _gtfs.putRoutes(2);
     }
 
     @Test
@@ -63,15 +64,15 @@ public class CreateParentStationsForQuaisTest {
         _strategy.run(new TransformContext(), _dao);
 
         assertEquals("de:08111:6115",
-                _dao.getStopForId(new AgencyAndId("a0", "de:08111:6115:1:1")).getParentStation());
+                _dao.getStopForId(new AgencyAndId("1", "de:08111:6115:1:1")).getParentStation());
         assertEquals("Stadtbibliothek",
-                _dao.getStopForId(new AgencyAndId("a0", "de:08111:6116")).getName());
+                _dao.getStopForId(new AgencyAndId("1", "de:08111:6116")).getName());
         assertEquals(48.78339,
-                _dao.getStopForId(new AgencyAndId("a0", "de:08111:6118")).getLat(), 0.0001);
+                _dao.getStopForId(new AgencyAndId("1", "de:08111:6118")).getLat(), 0.0001);
         assertEquals(9.1802,
-                _dao.getStopForId(new AgencyAndId("a0", "de:08111:6118")).getLon(), 0.0001);
+                _dao.getStopForId(new AgencyAndId("1", "de:08111:6118")).getLon(), 0.0001);
         assertEquals(1,
-                _dao.getStopForId(new AgencyAndId("a0", "de:08111:6118")).getLocationType());
+                _dao.getStopForId(new AgencyAndId("1", "de:08111:6118")).getLocationType());
 
     }
 }
