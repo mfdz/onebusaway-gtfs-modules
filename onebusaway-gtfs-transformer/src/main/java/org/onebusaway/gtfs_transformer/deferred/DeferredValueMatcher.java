@@ -21,6 +21,9 @@ import org.onebusaway.gtfs.model.IdentityBean;
 import org.onebusaway.gtfs.serialization.GtfsReader;
 import org.onebusaway.gtfs_transformer.match.ValueMatcher;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class DeferredValueMatcher implements ValueMatcher {
 
   private final DeferredValueSupport _support;
@@ -63,6 +66,8 @@ public class DeferredValueMatcher implements ValueMatcher {
           return regexMatch(expectedId.getId(), actualValue);
         }
         return expectedId.getId().equals(actualValue);
+      } else if (expectedValueType == Double.class && isRangeObj(_value)) {
+          return rangeValue.contains((Double)value);
       } else if (IdentityBean.class.isAssignableFrom(expectedValueType)) {
         IdentityBean<?> bean = (IdentityBean<?>) value;
         Object expectedId = bean.getId();
@@ -101,6 +106,30 @@ public class DeferredValueMatcher implements ValueMatcher {
     }
     return isRegexObj;
   }
+
+  private Boolean isRangeObj = null;
+  private Range rangeValue = null;
+  private boolean isRangeObj(Object value) {
+    if (isRangeObj == null) {
+      if (_value instanceof String) {
+        rangeValue = extractRangeIfApplicable((String) value);
+        if (rangeValue != null) {
+          isRangeObj = true;
+        }
+      }
+    }
+    return isRangeObj;
+  }
+  private Range extractRangeIfApplicable(String value) {
+    Pattern pattern = Pattern.compile("r/(\\d+(\\.\\d+)?)/(\\d+(\\.\\d+)?)/");
+    Matcher matcher = pattern.matcher(value);
+    if (matcher.matches()) {
+      return new Range(Double.parseDouble(matcher.group(1)),
+          Double.parseDouble(matcher.group(3)));
+    }
+    return null;
+  }
+
   private boolean isRegex(String pattern) {
     return pattern.startsWith("m/") && pattern.endsWith("/");
   }
@@ -111,5 +140,17 @@ public class DeferredValueMatcher implements ValueMatcher {
     String regexPattern = getRegexFromPattern(pattern);
     boolean rc = value.matches(regexPattern);
     return rc;
+  }
+
+  private static class Range{
+    double min, max;
+    public Range(double min, double max){
+      this.min = min;
+      this.max = max;
+    }
+
+    public boolean contains(double value){
+      return min <= value && value <= max;
+    }
   }
 }
